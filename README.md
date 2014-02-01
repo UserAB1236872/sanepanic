@@ -1,0 +1,4 @@
+Sane Panic
+==========
+
+This package provides a simple interface to centralize the handling of panics from multiple Goroutines in situations where typical panic handling is undesireable. Go will normally terminate a program's execution when it gets to the top of a Goroutine's stack; in some cases this may be undesireable, and it may be difficult or tedious to write customized recovery functions for each individual Goroutine. This is especially true of systems with a centrallized system of some sort that would be better suited towards handelling panics. This package allows you to provide a single simple cleanup function to forward all panics from any Goroutine to.
