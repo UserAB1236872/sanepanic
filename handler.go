@@ -29,7 +29,7 @@ type Info struct {
 
 // A HandlerFunc handles a panic and returns true if the panic
 // handler should continue running
-type HandlerFunc func(Info) bool
+type HandlerFunc func(Info) (keepHandling bool)
 
 var (
 	internalPanicHandler *Handler
