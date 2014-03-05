@@ -98,27 +98,32 @@ func TestNested(t *testing.T) {
 	}
 
 	wg := &sync.WaitGroup{}
-	wg.Add(1)
-	go func() {
-		quit := make(chan struct{})
-		ph := sanepanic.NewHandler(genHandler(quit))
-		for i := 0; i < 10; i++ {
-			i := i
-			wg.Add(1)
 
-			go func() {
-				defer wg.Done()
-				defer ph.Forward()
-				if i == 9 {
-					panic(i)
-				}
+	// Create 10 "servers" that spawn 10 "workers"
+	// one of which panics
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func() {
+			quit := make(chan struct{})
+			ph := sanepanic.NewHandler(genHandler(quit))
+			for i := 0; i < 10; i++ {
+				i := i
+				wg.Add(1)
 
-				<-quit
-			}()
-		}
+				go func() {
+					defer wg.Done()
+					defer ph.Forward()
+					if i == 9 {
+						panic(i)
+					}
 
-		wg.Done()
-	}()
+					<-quit
+				}()
+			}
+
+			wg.Done()
+		}()
+	}
 
 	wg.Wait() // Will deadlock if test fails
 }
