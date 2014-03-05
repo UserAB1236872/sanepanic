@@ -106,15 +106,15 @@ func TestNested(t *testing.T) {
 		go func() {
 			quit := make(chan struct{})
 			ph := sanepanic.NewHandler(genHandler(quit))
-			for i := 0; i < 10; i++ {
-				i := i
+			for j := 0; j < 10; j++ {
+				j := j
 				wg.Add(1)
 
 				go func() {
 					defer wg.Done()
 					defer ph.Forward()
-					if i == 9 {
-						panic(i)
+					if j == 9 {
+						panic(j)
 					}
 
 					<-quit
