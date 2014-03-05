@@ -6,15 +6,21 @@ import (
 	"testing"
 )
 
-func TestSomething(t *testing.T) {
-	defer func() {
-		err := recover()
-		if err == nil {
-			t.Fatal("No panic")
-		}
+func TestBasic(t *testing.T) {
+	quit := make(chan struct{})
+	handler := func(sanepanic.Info) bool {
+		close(quit)
+		return false
+	}
+
+	sanepanic.SetHandlerFunc(handler)
+
+	go func() {
+		defer sanepanic.Forward()
+		panic("Oh no!")
 	}()
 
-	panic("Panic!")
+	<-quit // Will deadlock if test fails
 }
 
 func TestCatchAll(t *testing.T) {
