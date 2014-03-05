@@ -101,7 +101,7 @@ func TestNested(t *testing.T) {
 
 	// Create 10 "servers" that spawn 10 "workers"
 	// one of which panics
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 10; i++ {
 		wg.Add(1)
 		go func() {
 			quit := make(chan struct{})
